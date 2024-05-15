@@ -16,7 +16,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::resource('categories', \App\Http\Controllers\CategoryController::class);
+    Route::resources([
+        'categories' => \App\Http\Controllers\CategoryController::class,
+        'payments' => \App\Http\Controllers\PaymentController::class,
+    ]);
 });
 
 require __DIR__.'/auth.php';

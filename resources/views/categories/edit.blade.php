@@ -24,10 +24,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit"
-                                class="focus:outline-none text-white bg-green-600 hover:bg-green-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+                        <x-primary-button>
                             {{ __('Save') }}
-                        </button>
+                        </x-primary-button>
                     </form>
                 </div>
             </div>

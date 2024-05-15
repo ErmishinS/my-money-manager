@@ -1,17 +1,27 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Categories') }}
+            {{ __('Payments') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <a href="{{ route('categories.create') }}">
-                <x-primary-button>
-                    {{ __('Create') }}
-                </x-primary-button>
-            </a>
+            <div class="flex justify-between items-center">
+                <a href="{{ route('payments.create') }}">
+                    <x-primary-button>
+                        {{ __('Create') }}
+                    </x-primary-button>
+                </a>
+                <div class="grid grid-cols-1 bg-white rounded-md border border-gray-400 p-2">
+                    <span>
+                        Cash: {{ $cash }}
+                    </span>
+                    <span>
+                        Non-Cash: {{ $non_cash }}
+                    </span>
+                </div>
+            </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-2">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex flex-col">
@@ -27,7 +37,19 @@
                                             </th>
                                             <th scope="col"
                                                 class="text-sm font-medium text-white px-6 py-4 text-left">
-                                                {{ __('name') }}
+                                                {{ __('amount') }}
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-white px-6 py-4 text-left">
+                                                {{ __('money_type') }}
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-white px-6 py-4 text-left">
+                                                {{ __('payment_type') }}
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-white px-6 py-4 text-left">
+                                                {{ __('category') }}
                                             </th>
                                             <th scope="col"
                                                 class="text-sm font-medium text-white px-6 py-4 text-left">
@@ -36,16 +58,25 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @forelse($categories as $category)
+                                        @forelse($payments as $payment)
                                             <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {{ ($categories->currentpage()-1) * $categories->perpage() + $loop->index + 1 }}
+                                                    {{ ($payments->currentpage()-1) * $payments->perpage() + $loop->index + 1 }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600 @if($payment->amount < 0) text-red-600 @endif" >
+                                                    {{ $payment->amount }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {{ $category->name }}
+                                                    {{ $payment->money_type->name }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    <a href="{{ route('categories.edit', $category) }}"
+                                                    {{ $payment->payment_type->name }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    {{ $payment->category->name }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    <a href="{{ route('payments.edit', $payment) }}"
                                                        style="display: inline-flex">
                                                         <svg class="w-6 h-6" fill="none" stroke="currentColor"
                                                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +86,7 @@
                                                         </svg>
                                                     </a>
                                                     <form method="POST"
-                                                          action="{{ route('categories.destroy', $category) }}"
+                                                          action="{{ route('payments.destroy', $payment) }}"
                                                           style="display: inline-flex">
                                                         @method('DELETE')
                                                         @csrf
@@ -72,7 +103,7 @@
                                             </tr>
                                         @empty
                                             <tr class="bg-white border transition duration-300 ease-in-out hover:bg-gray-100">
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center" colspan="4">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center" colspan="6">
                                                     {{ __('DB is empty D:') }}
                                                 </td>
                                             </tr>
@@ -80,7 +111,7 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4">
-                                        {{ $categories->links() }}
+                                        {{ $payments->links() }}
                                     </div>
                                 </div>
                             </div>
