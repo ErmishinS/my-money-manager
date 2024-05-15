@@ -12,9 +12,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/wallet', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/wallet', [\App\Http\Controllers\PaymentController::class, 'index'])->name('dashboard');
 
     Route::resources([
         'categories' => \App\Http\Controllers\CategoryController::class,

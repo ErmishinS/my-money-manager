@@ -17,7 +17,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with(['money_type', 'payment_type', 'category'])->orderByDesc('created_at')->paginate();
+        $payments = Payment::with(['money_type', 'payment_type', 'category'])->orderByDesc('created_at')->paginate(10);
         $cash = Payment::where('money_type_id', 1)->sum('amount');
         $non_cash = Payment::where('money_type_id', 2)->sum('amount');
 
