@@ -9,6 +9,7 @@ use App\Models\MoneyType;
 use App\Models\Payment;
 use App\Models\PaymentType;
 use Illuminate\Support\Facades\Auth;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class PaymentController extends Controller
 {
@@ -21,7 +22,80 @@ class PaymentController extends Controller
         $cash = Payment::where('money_type_id', 1)->sum('amount');
         $non_cash = Payment::where('money_type_id', 2)->sum('amount');
 
-        return view('payments.index', compact('payments', 'cash', 'non_cash'));
+        $chart_options = [
+            'chart_title' => 'Expenses by category',
+            'report_type' => 'group_by_relationship',
+            'relationship_name' => 'category',
+            'model' => 'App\Models\Payment',
+            'where_raw' => 'payment_type_id = 2',
+            'group_by_field' => 'name',
+            'filter_field' => 'created_at',
+            'filter_days' => 30,
+            'group_by_period' => 'day',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'amount',
+            'chart_height' => '300px',
+            'aggregate_transform' => function($value) {
+                return -$value;
+            },
+            'chart_type' => 'pie',
+        ];
+
+        $chart1 = new LaravelChart($chart_options);
+
+        $chart_options = [
+            'chart_title' => 'Incomes by category',
+            'report_type' => 'group_by_relationship',
+            'relationship_name' => 'category',
+            'model' => 'App\Models\Payment',
+            'where_raw' => 'payment_type_id = 1',
+            'group_by_field' => 'name',
+            'filter_field' => 'created_at',
+            'filter_days' => 30,
+            'group_by_period' => 'day',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'amount',
+            'chart_type' => 'pie',
+        ];
+
+        $chart2 = new LaravelChart($chart_options);
+
+        $chart_options = [
+            'chart_title' => 'Incomes by dates',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\Payment',
+            'where_raw' => 'payment_type_id = 1',
+            'group_by_field' => 'created_at',
+            'filter_field' => 'created_at',
+            'filter_days' => 30,
+            'group_by_period' => 'day',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'amount',
+            'chart_type' => 'line',
+        ];
+
+        $chart3 = new LaravelChart($chart_options);
+
+        $chart_options = [
+            'chart_title' => 'Expenses by dates',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\Payment',
+            'where_raw' => 'payment_type_id = 2',
+            'group_by_field' => 'created_at',
+            'filter_field' => 'created_at',
+            'filter_days' => 30,
+            'group_by_period' => 'day',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'amount',
+            'aggregate_transform' => function($value) {
+                return -$value;
+            },
+            'chart_type' => 'line',
+        ];
+
+        $chart4 = new LaravelChart($chart_options);
+
+        return view('payments.index', compact('payments', 'cash', 'non_cash', 'chart1', 'chart2', 'chart3', 'chart4'));
     }
 
     /**
