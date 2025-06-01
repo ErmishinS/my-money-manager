@@ -29,6 +29,7 @@ class ReportServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withoutVite();
         
         $this->reportService = new ReportService();
         

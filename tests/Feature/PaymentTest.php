@@ -23,6 +23,7 @@ class PaymentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withoutVite();
         
         $this->user = User::factory()->create();
         $this->paymentType = PaymentType::factory()->create(['name' => 'Income']);
@@ -161,7 +162,7 @@ class PaymentTest extends TestCase
     public function test_payment_statistics_are_calculated_correctly()
     {
         $this->actingAs($this->user);
-        
+
         $incomeType = PaymentType::factory()->create(['name' => 'income']);
         $expenseType = PaymentType::factory()->create(['name' => 'expense']);
 
