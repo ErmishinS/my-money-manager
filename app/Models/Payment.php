@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\BelongsToUserScope;
 
 class Payment extends Model
 {
@@ -35,5 +36,10 @@ class Payment extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new BelongsToUserScope);
     }
 }
