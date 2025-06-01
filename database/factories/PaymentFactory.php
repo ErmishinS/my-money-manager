@@ -7,6 +7,7 @@ use App\Models\MoneyType;
 use App\Models\PaymentType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Scopes\BelongsToUserScope;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payment>
@@ -31,7 +32,7 @@ class PaymentFactory extends Factory
             'money_type_id' => MoneyType::all()->random()->id,
             'payment_type_id' => $payment_type,
             'user_id' => User::all()->first(),
-            'category_id' => Category::all()->random()->id,
+            'category_id' => Category::withoutGlobalScope(BelongsToUserScope::class)->get()->random()->id,
             'created_at' => $this->faker->dateTimeThisYear(),
         ];
     }
