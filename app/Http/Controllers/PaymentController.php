@@ -117,7 +117,7 @@ class PaymentController extends Controller
     {
         $data = $request->validated();
 
-        if ($data['payment_type_id'] == PaymentType::where('name', 'Expense')->first()->id) {
+        if ($data['payment_type_id'] == PaymentType::where('name', 'Expense')->first()?->id) {
             $data['amount'] = -abs($data['amount']);
         } else {
             $data['amount'] = abs($data['amount']);
@@ -147,6 +147,8 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
+        abort_if($payment->user->id != auth()->id(), 404);
+
         $money_types = MoneyType::select('name', 'id')->get();
         $payment_types = PaymentType::select('name', 'id')->get();
         $categories = Category::where('user_id', Auth::id())->get();
@@ -161,7 +163,7 @@ class PaymentController extends Controller
     {
         $data = $request->validated();
 
-        if ($data['payment_type_id'] == PaymentType::where('name', 'Expense')->first()->id) {
+        if ($data['payment_type_id'] == PaymentType::where('name', 'Expense')->first()?->id) {
             $data['amount'] = -abs($data['amount']);
         } else {
             $data['amount'] = abs($data['amount']);
