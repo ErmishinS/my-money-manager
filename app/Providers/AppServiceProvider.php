@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (env('VITE_DISABLED')) {
+        app()->bind(Vite::class, fn () => new class {
+            public function __invoke(...$args) { return ''; }
+            public function asset(...$args) { return ''; }
+        });
+    }
     }
 }
