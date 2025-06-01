@@ -33,6 +33,8 @@ class PaymentTest extends TestCase
 
     public function test_user_can_view_payments_index()
     {
+        $this->actingAs($this->user);
+
         $payments = Payment::factory(3)->create([
             'user_id' => $this->user->id,
             'category_id' => $this->category->id,
@@ -83,6 +85,8 @@ class PaymentTest extends TestCase
 
     public function test_user_can_update_payment()
     {
+        $this->actingAs($this->user);
+
         $payment = Payment::factory()->create([
             'user_id' => $this->user->id,
             'category_id' => $this->category->id,
@@ -110,6 +114,8 @@ class PaymentTest extends TestCase
 
     public function test_user_can_delete_payment()
     {
+        $this->actingAs($this->user);
+
         $payment = Payment::factory()->create([
             'user_id' => $this->user->id,
             'category_id' => $this->category->id,
@@ -134,6 +140,8 @@ class PaymentTest extends TestCase
 
     public function test_user_cannot_access_other_users_payments()
     {
+        $this->actingAs($this->user);
+
         $otherUser = User::factory()->create();
         $otherCategory = Category::factory()->create(['user_id' => $otherUser->id]);
         
@@ -152,7 +160,8 @@ class PaymentTest extends TestCase
 
     public function test_payment_statistics_are_calculated_correctly()
     {
-        // Создаем доходы и расходы
+        $this->actingAs($this->user);
+        
         $incomeType = PaymentType::factory()->create(['name' => 'income']);
         $expenseType = PaymentType::factory()->create(['name' => 'expense']);
 
