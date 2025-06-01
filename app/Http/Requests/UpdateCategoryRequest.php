@@ -23,7 +23,10 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100', Rule::unique('categories', 'name')->ignore($this->category)],
+            'name' => ['required', 'string', 'max:100', Rule::unique('categories', 'name')->where(function ($query) {
+                $query->where('user_id', auth()->id());
+            })->ignore($this->category)],
+            'payment_type_id' => Rule::exists('payment_types', 'id'),
         ];
     }
 }
